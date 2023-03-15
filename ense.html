@@ -19,7 +19,7 @@
     <meta name="twitter:site" content="@lazosnexos" />
     <meta name="twitter:creator" content="@ManuelVarZen">
     <meta name="twitter:title" content="LazosNexos" />
-	<meta property="og:description" content="Aproximaciones no convencionales a los datos abiertos" />
+    <meta name="twitter:description" content="Aproximaciones" />
     <meta name="twitter:image" content="https://lazosnexos.com/img/image026.jpg"/>
     
     <!-- Open Graph -->
@@ -38,6 +38,7 @@
     <link type="text/css" rel="stylesheet" href="/examples/main.css">
     
     <!-- style title -->
+    <!-- style title -->
     <style>
 		#info {
 			background-color: rgba(0, 0, 0, 0.8);
@@ -51,7 +52,6 @@
 		} 
 		
 	</style>
-  
   </head>
   
   
@@ -77,10 +77,10 @@
 	<script type="importmap">
 		{
 			"imports": {
-				"three": "/build/three.module.js"
+				"three": "/build/three.module.js" 
 			}
 		}
-	</script>
+	</script> 
 
 <!-- Custom -->
 
@@ -88,82 +88,88 @@
 
 			import * as THREE from 'three';
 
-			import Stats from '/examples/jsm/libs/stats.module.js';
+			import { FlyControls } from '/examples/jsm/controls/FlyControls.js';
 
-			import { FirstPersonControls } from '/examples/jsm/controls/FirstPersonControls.js';
+			let container;
 
-			let camera, controls, scene, renderer, stats;
+			let camera, scene, renderer, controls;
 
-			let mesh, geometry, material, clock;
-
-			const worldWidth = 128, worldDepth = 128;
+			const clock = new THREE.Clock();
 
 			init();
+
+			const loader1 = new THREE.TextureLoader();
+			const bgTexture = loader1.load('/img/image-d_1920x1080.png');
+			scene.background = bgTexture;
 			
 			animate();
 
 			function init() {
-                
-                const loader = new THREE.TextureLoader;    
-                
-				camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 20000 );
-				
-				camera.position.y = 200;
 
-				clock = new THREE.Clock();
+				container = document.createElement( 'div' );
+				document.body.appendChild( container );
+
+				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 7500 );
+				camera.position.z = 1000;
 
 				scene = new THREE.Scene();
-				
-				// scene.background = new THREE.Color( 0xaaccff );
-				
-				scene.background = loader.load( '/img/Image_035.jpg' );
-				
-				scene.fog = new THREE.FogExp2( 0xaaccff, 0.0007 );
+				scene.fog = new THREE.Fog( 0x000000, 1, 15000 ); //cantidad
 
-				geometry = new THREE.PlaneGeometry( 20000, 20000, worldWidth - 1, worldDepth - 1 );
-				
-				geometry.rotateX( - Math.PI / 2 );
+				const pointLight = new THREE.PointLight( 0xff2200 );
+				pointLight.position.set( 0, 0, 0 );
+				scene.add( pointLight );
 
-				const position = geometry.attributes.position;
-				
-				position.usage = THREE.DynamicDrawUsage;
+				const dirLight = new THREE.DirectionalLight( 0xffffff );
+				dirLight.position.set( 0, 0, 1 ).normalize();
+				scene.add( dirLight );
 
-				for ( let i = 0; i < position.count; i ++ ) {
+				const geometry = [
 
-					const y = 35 * Math.sin( i / 2 );
-					position.setY( i, y );
+					[ new THREE.IcosahedronGeometry( 100, 16 ), 50 ],
+					[ new THREE.IcosahedronGeometry( 100, 8 ), 300 ],
+					[ new THREE.IcosahedronGeometry( 100, 4 ), 1000 ],
+					[ new THREE.IcosahedronGeometry( 100, 2 ), 2000 ],
+					[ new THREE.IcosahedronGeometry( 100, 1 ), 8000 ]
+
+				];
+
+				const material = new THREE.MeshLambertMaterial( { color: 0xffffff, wireframe: true } ); //color de la esfera
+				//const material = new THREE.MeshLambertMaterial( { color: 0xff0000, wireframe: true } ); //color de la esfera
+
+				for ( let j = 0; j < 10000; j ++ ) {
+
+					const lod = new THREE.LOD();
+
+					for ( let i = 0; i < geometry.length; i ++ ) {
+
+						const mesh = new THREE.Mesh( geometry[ i ][ 0 ], material );
+						mesh.scale.set( 1.5, 1.5, 1.5 );
+						mesh.updateMatrix();
+						mesh.matrixAutoUpdate = false;
+						lod.addLevel( mesh, geometry[ i ][ 1 ] );
+
+					}
+
+					lod.position.x = 10000 * ( 0.5 - Math.random() );
+					lod.position.y = 7500 * ( 0.5 - Math.random() );
+					lod.position.z = 10000 * ( 0.5 - Math.random() );
+					lod.updateMatrix();
+					lod.matrixAutoUpdate = false;
+					scene.add( lod );
 
 				}
 
-				const texture = new THREE.TextureLoader().load( '/examples/textures/water.jpg' );
-				
-				texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-				
-				texture.repeat.set( 5, 5 );
-
-				material = new THREE.MeshBasicMaterial( { color: 0x0044ff, map: texture } );
-
-				mesh = new THREE.Mesh( geometry, material );
-				
-				scene.add( mesh );
 
 				renderer = new THREE.WebGLRenderer( { antialias: true } );
-				
 				renderer.setPixelRatio( window.devicePixelRatio );
-				
 				renderer.setSize( window.innerWidth, window.innerHeight );
-				
-				document.body.appendChild( renderer.domElement );
+				container.appendChild( renderer.domElement );
 
-				controls = new FirstPersonControls( camera, renderer.domElement );
+				//
 
-				controls.movementSpeed = 500;
-				
-				controls.lookSpeed = 0.1;
-
-				// stats = new Stats();
-				
-				// document.body.appendChild( stats.dom );
+				controls = new FlyControls( camera, renderer.domElement );
+				controls.movementSpeed = 1;
+				controls.rollSpeed = Math.PI / 35;
 
 				//
 
@@ -178,38 +184,19 @@
 
 				renderer.setSize( window.innerWidth, window.innerHeight );
 
-				controls.handleResize();
-
 			}
-
-			//
 
 			function animate() {
 
 				requestAnimationFrame( animate );
-
 				render();
-				stats.update();
 
 			}
 
 			function render() {
 
-				const delta = clock.getDelta();
-				const time = clock.getElapsedTime() * 10;
+				controls.update( clock.getDelta() );
 
-				const position = geometry.attributes.position;
-
-				for ( let i = 0; i < position.count; i ++ ) {
-
-					const y = 35 * Math.sin( i / 5 + ( time + i ) / 7 );
-					position.setY( i, y );
-
-				}
-
-				position.needsUpdate = true;
-
-				controls.update( delta );
 				renderer.render( scene, camera );
 
 			}
