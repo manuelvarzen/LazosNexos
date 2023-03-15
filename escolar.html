@@ -1,0 +1,204 @@
+<!doctype html>
+
+<html lang="es" class="h-100">
+  
+  <head>
+
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    
+    <meta name="Content-Type" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+    <meta name="description" content="Aproximación, exploración e indagación" />
+    <meta name="author" content="ManuelVarZen" />
+    <meta name="generator" content="" />
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@lazosnexos" />
+    <meta name="twitter:creator" content="@ManuelVarZen">
+    <meta name="twitter:title" content="LazosNexos" />
+    <meta name="twitter:description" content="Aproximaciones" />
+    <meta name="twitter:image" content="https://lazosnexos.com/img/image026.jpg"/>
+    
+    <!-- Open Graph -->
+    <meta property="og:url" content="https://laxosnexos.com" />
+    <meta property="og:type" content="page" />
+    <meta property="og:title" content="LazosNexos" />
+    <meta property="og:description" content="Aproximaciones" />
+    <meta property="og:image" content="https://lazosnexos.com/img/image026.jpg" />
+    <meta property="og:image:secure_url" content="https://lazosnexos.com/img/image026.jpg" />
+    <meta property="og:image:alt" content="filosofía" />
+    
+    <title>LazosNexos</title>
+
+    <link rel="canonical" href="https://lazosnexos.com">
+
+    <link rel=”stylesheet” type="text/css"> 
+    
+    <link href="https://lazosnexos.com/examples/main-1.css" rel="stylesheet">
+   
+    <!-- style title -->
+    <!-- style title -->
+    <style>
+		#info {
+			background-color: rgba(0, 0, 0, 0.8);
+			font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+	        font-size: 22px;
+		}
+
+        .lil-gui .gui-stats {
+			line-height: var(--widget-height);
+			padding: var(--padding);
+		} 
+		
+		body {
+			background-image: url("/img/Image_045.jpg");
+			  }
+	</style>
+	
+  </head>
+  
+<!-- Start Body -->
+
+
+<body>
+	<div id="info">
+		
+		<a href="/index.html" target="_self" rel="noopener">Lazos Nexos</a> 
+		<a href="/datavismex1.html" target="_self" rel="noopener">|Escuela|</a>
+		<a href="/escolar.html" target="_self" rel="noopener">|Escolarización|</a>
+		<a href="/capacitacion.html" target="_self" rel="noopener">|Capacitación|</a>
+		<a href="/debate.html" target="_self" rel="noopener">|Debate|</a>
+		<a href="/ense.html" target="_self" rel="noopener">|Enseñanza|</a>
+		<a href="/aprend.html" target="_self" rel="noopener">|Aprendizaje|</a>
+	</div>
+
+	<div id="container">
+
+	    
+	   </div>
+
+	<!-- Import maps polyfill -->
+	<!-- Remove this when import maps will be widely supported -->
+	
+	<script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
+	
+	<script async src="/examples/jsm/loaders/GLTFloader.js"></script>
+	
+	<script type="importmap">
+		{
+			"imports": {
+				"three": "/build/three.module.js"
+			}
+		}
+	</script>
+	
+
+<!-- Custom -->
+
+<script type="module">
+
+			import * as THREE from 'three';
+
+			import { OrbitControls } from '/examples/jsm/controls/OrbitControls.js';
+			
+			import { PCDLoader } from '/examples/jsm/loaders/PCDLoader.js';
+
+			let camera, scene, renderer;
+
+			init();
+			render();
+
+			function init() {
+
+				renderer = new THREE.WebGLRenderer( { 
+				    antialias: true, 
+				    alpha: true,
+				} );
+				
+				renderer.setPixelRatio( window.devicePixelRatio );
+				
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				
+				document.body.appendChild( renderer.domElement );
+
+				scene = new THREE.Scene();
+
+				camera = new THREE.PerspectiveCamera( 30, window.innerWidth / 
+				    window.innerHeight, 0.01, 40 );
+				
+				camera.position.set( 0, 0, 1 );
+				
+				scene.add( camera );
+
+				const controls = new OrbitControls( camera, renderer.domElement );
+				controls.addEventListener( 'change', render ); // use if there is no animation loop
+				controls.minDistance = 0.5;
+				controls.maxDistance = 10;
+
+				//scene.add( new THREE.AxesHelper( 1 ) );
+
+				const loader = new PCDLoader();
+				
+				loader.load( '/examples/models/pcd/binary/Zaghetto.pcd', function ( points ) {
+
+					points.geometry.center();
+					points.geometry.rotateX( Math.PI );
+					scene.add( points );
+
+					render();
+
+				} );
+
+				window.addEventListener( 'resize', onWindowResize );
+
+				window.addEventListener( 'keypress', keyboard );
+
+			}
+
+			function onWindowResize() {
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+			}
+
+			function keyboard( ev ) {
+
+				const points = scene.getObjectByName( 'Zaghetto.pcd' );
+
+				switch ( ev.key || String.fromCharCode( ev.keyCode || ev.charCode ) ) {
+
+					case '+':
+						points.material.size *= 1.2;
+						break;
+
+					case '-':
+						points.material.size /= 1.2;
+						break;
+
+					case 'c':
+						points.material.color.setHex( Math.random() * 0xffffff );
+						break;
+
+				}
+
+				render();
+
+			}
+
+			function render() {
+
+				renderer.render( scene, camera );
+
+			}
+
+		</script>
+
+	</body>
+</html>

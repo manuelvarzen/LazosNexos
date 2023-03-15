@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es" class="h-100">
+  
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    <meta name="Content-Type" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+    <meta name="description" content="Aproximación, exploración e indagación" />
+    <meta name="author" content="ManuelVarZen" />
+    <meta name="generator" content="" />
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@lazosnexos" />
+    <meta name="twitter:creator" content="@ManuelVarZen">
+    <meta name="twitter:title" content="LazosNexos" />
+    <meta name="twitter:description" content="Aproximaciones" />
+    <meta name="twitter:image" content="https://lazosnexos.com/img/image026.jpg"/>
+    
+    <!-- Open Graph -->
+    <meta property="og:url" content="https://laxosnexos.com" />
+    <meta property="og:type" content="page" />
+    <meta property="og:title" content="LazosNexos" />
+    <meta property="og:description" content="Aproximaciones" />
+    <meta property="og:image" content="https://lazosnexos.com/img/image026.jpg" />
+    <meta property="og:image:secure_url" content="https://lazosnexos.com/img/image026.jpg" />
+    <meta property="og:image:alt" content="filosofía" />
+    
+    <title>LazosNexos</title>
+    <link rel="canonical" href="https://lazosnexos.com">
+    <link type="text/css" rel="stylesheet" href="/examples/main.css">
+
+    <style>
+		#info {
+			background-color: rgba(0, 0, 0, 0.8);
+			font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+	        font-size: 22px;
+		}
+
+        .lil-gui .gui-stats {
+			line-height: var(--widget-height);
+			padding: var(--padding);
+		} 
+		
+	</style>
+</head>
+
+<body>
+	<div id="info">
+		<a href="/index.html" target="_self" rel="noopener">Lazos Nexos</a> 
+		<a href="/datavismex1.html" target="_self" rel="noopener">|Escuela|</a>
+		<a href="/escolar.html" target="_self" rel="noopener">|Escolarización|</a>
+		<a href="/capacitacion.html" target="_self" rel="noopener">|Capacitación|</a>
+		<a href="/debate.html" target="_self" rel="noopener">|Debate|</a>
+		<a href="/ense.html" target="_self" rel="noopener">|Enseñanza|</a>
+		<a href="/aprend.html" target="_self" rel="noopener">|Aprendizaje|</a>
+	</div>
+
+	<!-- Import maps polyfill -->
+	<!-- Remove this when import maps will be widely supported -->	
+	<script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
+	<script type="importmap">
+		{
+			"imports": {
+				"three": "../build/three.module.js" 
+			}
+		}
+	
+	</script> 
+
+	<script type="module">
+
+		import * as THREE from 'three';
+		import { KTX2Loader } from '/examples/jsm/loaders/KTX2Loader.js';
+		import { OrbitControls } from '/examples/jsm/controls/OrbitControls.js';
+
+		const width = window.innerWidth;
+		const height = window.innerHeight;
+
+		const renderer = new THREE.WebGLRenderer( { antialias: true } );
+		renderer.setSize( width, height );
+		renderer.outputEncoding = THREE.sRGBEncoding;
+		document.body.appendChild( renderer.domElement );
+
+		const scene = new THREE.Scene();
+		scene.background = new THREE.Color( 0x202020 );
+
+		const camera = new THREE.PerspectiveCamera( 60, width / height, 0.1, 500 );
+		camera.position.set( 0.5, 0.5, 0.15 );
+		camera.lookAt( scene.position );
+		scene.add( camera );
+
+		const controls = new OrbitControls( camera, renderer.domElement );
+		controls.autoRotate = true;
+
+		// PlaneGeometry UVs assume flipY=true, which compressed textures don't support.
+		const geometry = flipY( new THREE.PlaneGeometry() );
+		const material = new THREE.MeshBasicMaterial( {
+			color: 0xFFFFFF,
+			side: THREE.DoubleSide
+		} );
+		const mesh = new THREE.Mesh( geometry, material );
+		scene.add( mesh );
+
+		const formatStrings = {
+			[ THREE.RGBAFormat ]: 'RGBA32',
+			[ THREE.RGBA_BPTC_Format ]: 'RGBA_BPTC',
+			[ THREE.RGBA_ASTC_4x4_Format ]: 'RGBA_ASTC_4x4',
+			[ THREE.RGB_S3TC_DXT1_Format ]: 'RGB_S3TC_DXT1',
+			[ THREE.RGBA_S3TC_DXT5_Format ]: 'RGBA_S3TC_DXT5',
+			[ THREE.RGB_PVRTC_4BPPV1_Format ]: 'RGB_PVRTC_4BPPV1',
+			[ THREE.RGBA_PVRTC_4BPPV1_Format ]: 'RGBA_PVRTC_4BPPV1',
+			[ THREE.RGB_ETC1_Format ]: 'RGB_ETC1',
+			[ THREE.RGB_ETC2_Format ]: 'RGB_ETC2',
+			[ THREE.RGBA_ETC2_EAC_Format ]: 'RGB_ETC2_EAC',
+		};
+
+		// Samples: sample_etc1s.ktx2, sample_uastc.ktx2, sample_uastc_zstd.ktx2
+		// carga la imagen del fondo. 
+		const loader1 = new THREE.TextureLoader();
+		const bgTexture = loader1.load('/img/InterProfe.jpg');
+		scene.background = bgTexture;
+		// carga la imagen 
+		const loader = new KTX2Loader()
+			.setTranscoderPath( '/examples/js/libs/basis/' )
+			.detectSupport( renderer );
+
+		animate();
+
+		try {
+			const texture = await loader.loadAsync( '/img/red_semantica.ktx2' );
+			console.info( `transcoded to ${formatStrings[ texture.format ]}` );
+			material.map = texture;
+			material.transparent = true;
+			material.needsUpdate = true;
+
+		} catch ( e ) {
+			console.error( e );
+
+		} finally {
+			loader.dispose();
+		}
+
+		function animate() {
+			requestAnimationFrame( animate );
+			controls.update();
+			renderer.render( scene, camera );
+		}
+
+		window.addEventListener( 'resize', onWindowResize );
+
+		function onWindowResize() {
+			const width = window.innerWidth;
+			const height = window.innerHeight;
+			camera.aspect = width / height;
+			camera.updateProjectionMatrix();
+			renderer.setSize( width, height );
+		}
+
+		/** Correct UVs to be compatible with `flipY=false` textures. */
+		function flipY( geometry ) {
+			const uv = geometry.attributes.uv;
+			for ( let i = 0; i < uv.count; i ++ ) {
+				uv.setY( i, 1 - uv.getY( i ) );
+			}
+			return geometry;
+		}
+
+	</script>
+	
+	</body>
+
+</html> 

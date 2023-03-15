@@ -1,0 +1,220 @@
+<!doctype html>
+
+<html lang="es" class="h-100">
+  
+  <head>
+
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    
+    <meta name="Content-Type" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+    <meta name="description" content="Aproximación, exploración e indagación" />
+    <meta name="author" content="ManuelVarZen" />
+    <meta name="generator" content="" />
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@lazosnexos" />
+    <meta name="twitter:creator" content="@ManuelVarZen">
+    <meta name="twitter:title" content="LazosNexos" />
+    <meta name="twitter:description" content="Aproximaciones" />
+    <meta name="twitter:image" content="https://lazosnexos.com/img/image026.jpg"/>
+    
+    <!-- Open Graph -->
+    <meta property="og:url" content="https://laxosnexos.com" />
+    <meta property="og:type" content="page" />
+    <meta property="og:title" content="LazosNexos" />
+    <meta property="og:description" content="Aproximaciones" />
+    <meta property="og:image" content="https://lazosnexos.com/img/image026.jpg" />
+    <meta property="og:image:secure_url" content="https://lazosnexos.com/img/image026.jpg" />
+    <meta property="og:image:alt" content="filosofía" />
+    
+    <title>LazosNexos</title>
+
+    <link rel="canonical" href="https://lazosnexos.com">
+
+    <link type="text/css" rel="stylesheet" href="https://lazosnexos.com/examples/main.css">
+    
+    <!-- style title -->
+    <style>
+		#info {
+			background-color: rgba(0, 0, 0, 0.8);
+			font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+	        font-size: 22px;
+		}
+
+        .lil-gui .gui-stats {
+			line-height: var(--widget-height);
+			padding: var(--padding);
+		} 
+		
+	</style>
+  
+  </head>
+  
+  
+<!-- Start Body -->
+<body>
+	<div id="info">
+		<a href="/index.html" target="_self" rel="noopener">Lazos Nexos</a> 
+		<a href="/datavismex1.html" target="_self" rel="noopener">|Escuela|</a>
+		<a href="/escolar.html" target="_self" rel="noopener">|Escolarización|</a>
+		<a href="/capacitacion.html" target="_self" rel="noopener">|Capacitación|</a>
+		<a href="/debate.html" target="_self" rel="noopener">|Debate|</a>
+		<a href="/ense.html" target="_self" rel="noopener">|Enseñanza|</a>
+		<a href="/aprend.html" target="_self" rel="noopener">|Aprendizaje|</a>
+	</div>
+
+	<div id="container"></div>
+
+	<!-- Import maps polyfill -->
+	<!-- Remove this when import maps will be widely supported -->
+	
+	<script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
+
+	<script type="importmap">
+		{
+			"imports": {
+				"three": "/build/three.module.js"
+			}
+		}
+	</script>
+
+<!-- Custom -->
+
+		<script type="module">
+
+			import * as THREE from 'three';
+
+			import Stats from '/examples/jsm/libs/stats.module.js';
+
+			import { FirstPersonControls } from '/examples/jsm/controls/FirstPersonControls.js';
+
+			let camera, controls, scene, renderer, stats;
+
+			let mesh, geometry, material, clock;
+
+			const worldWidth = 128, worldDepth = 128;
+
+			init();
+			
+			animate();
+
+			function init() {
+                
+                const loader = new THREE.TextureLoader;    
+                
+				camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 20000 );
+				
+				camera.position.y = 200;
+
+				clock = new THREE.Clock();
+
+				scene = new THREE.Scene();
+				
+				// scene.background = new THREE.Color( 0xaaccff );
+				
+				scene.background = loader.load( '/img/Image_035.jpg' );
+				
+				scene.fog = new THREE.FogExp2( 0xaaccff, 0.0007 );
+
+				geometry = new THREE.PlaneGeometry( 20000, 20000, worldWidth - 1, worldDepth - 1 );
+				
+				geometry.rotateX( - Math.PI / 2 );
+
+				const position = geometry.attributes.position;
+				
+				position.usage = THREE.DynamicDrawUsage;
+
+				for ( let i = 0; i < position.count; i ++ ) {
+
+					const y = 35 * Math.sin( i / 2 );
+					position.setY( i, y );
+
+				}
+
+				const texture = new THREE.TextureLoader().load( '/examples/textures/water.jpg' );
+				
+				texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+				
+				texture.repeat.set( 5, 5 );
+
+				material = new THREE.MeshBasicMaterial( { color: 0x0044ff, map: texture } );
+
+				mesh = new THREE.Mesh( geometry, material );
+				
+				scene.add( mesh );
+
+				renderer = new THREE.WebGLRenderer( { antialias: true } );
+				
+				renderer.setPixelRatio( window.devicePixelRatio );
+				
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				
+				document.body.appendChild( renderer.domElement );
+
+				controls = new FirstPersonControls( camera, renderer.domElement );
+
+				controls.movementSpeed = 500;
+				
+				controls.lookSpeed = 0.1;
+
+				// stats = new Stats();
+				
+				// document.body.appendChild( stats.dom );
+
+				//
+
+				window.addEventListener( 'resize', onWindowResize );
+
+			}
+
+			function onWindowResize() {
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+				controls.handleResize();
+
+			}
+
+			//
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+
+				render();
+				stats.update();
+
+			}
+
+			function render() {
+
+				const delta = clock.getDelta();
+				const time = clock.getElapsedTime() * 10;
+
+				const position = geometry.attributes.position;
+
+				for ( let i = 0; i < position.count; i ++ ) {
+
+					const y = 35 * Math.sin( i / 5 + ( time + i ) / 7 );
+					position.setY( i, y );
+
+				}
+
+				position.needsUpdate = true;
+
+				controls.update( delta );
+				renderer.render( scene, camera );
+
+			}
+
+		</script>
+
+	</body>
+</html>

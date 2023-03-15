@@ -1,0 +1,243 @@
+<!doctype html>
+
+<html lang="es" class="h-100">
+  
+  <head>
+
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    
+    <meta name="Content-Type" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+    <meta name="description" content="Aproximación, exploración e indagación" />
+    <meta name="author" content="ManuelVarZen" />
+    <meta name="generator" content="" />
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@lazosnexos" />
+    <meta name="twitter:creator" content="@ManuelVarZen">
+    <meta name="twitter:title" content="LazosNexos" />
+    <meta name="twitter:description" content="Aproximaciones" />
+    <meta name="twitter:image" content="https://lazosnexos.com/img/image026.jpg"/>
+    
+    <!-- Open Graph -->
+    <meta property="og:url" content="https://laxosnexos.com" />
+    <meta property="og:type" content="page" />
+    <meta property="og:title" content="LazosNexos" />
+    <meta property="og:description" content="Aproximaciones" />
+    <meta property="og:image" content="https://lazosnexos.com/img/image026.jpg" />
+    <meta property="og:image:secure_url" content="https://lazosnexos.com/img/image026.jpg" />
+    <meta property="og:image:alt" content="filosofía" />
+    
+    <title>LazosNexos</title>
+
+    <link rel="canonical" href="https://lazosnexos.com">
+
+    <link type="text/css" rel="stylesheet" href="https://lazosnexos.com/examples/main.css">
+    
+    <!-- style title -->
+    <style>
+		#info {
+			background-color: rgba(0, 0, 0, 0.8);
+			font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+	        font-size: 22px;
+		}
+
+        .lil-gui .gui-stats {
+			line-height: var(--widget-height);
+			padding: var(--padding);
+		} 
+		
+	</style>
+  </head>
+  
+  
+<!-- Start Body -->
+<body>
+	<div id="info">
+		<a href="/index.html" target="_self" rel="noopener">Lazos Nexos</a> 
+		<a href="/datavismex1.html" target="_self" rel="noopener">|Escuela|</a>
+		<a href="/escolar.html" target="_self" rel="noopener">|Escolarización|</a>
+		<a href="/capacitacion.html" target="_self" rel="noopener">|Capacitación|</a>
+		<a href="/debate.html" target="_self" rel="noopener">|Debate|</a>
+		<a href="/ense.html" target="_self" rel="noopener">|Enseñanza|</a>
+		<a href="/aprend.html" target="_self" rel="noopener">|Aprendizaje|</a>
+	</div>
+
+	<div id="container"></div>
+	<!-- Import maps polyfill -->
+	<!-- Remove this when import maps will be widely supported -->
+	<script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
+	<script type="importmap">
+		{
+			"imports": {
+				"three": "/build/three.module.js"
+			}
+		}
+	</script> 
+
+<!-- Custom -->
+
+		<script type="module">
+			import * as THREE from 'three';
+            import Stats from '/examples/jsm/libs/stats.module.js';
+			import { GUI } from '/examples/jsm/libs/lil-gui.module.min.js';
+			let container, stats; 
+			let camera, scene, renderer;
+			let theta = 0;
+			const radius = 100;
+			init();
+			animate();
+
+			function init() {
+
+				container = document.createElement( 'div' );
+				document.body.appendChild( container );
+				
+				const loader = new THREE.TextureLoader;
+				
+                //Camera
+				camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 10000 );
+				camera.layers.enable( 0 ); // enabled by default
+				camera.layers.enable( 1 );
+				camera.layers.enable( 2 );
+				scene = new THREE.Scene();
+
+				//scene.background = new THREE.Color( 0xf0f0f0 );
+				scene.background = loader.load( '/img/image026.jpg' );
+
+				const light = new THREE.PointLight( 0xffffff, 1 );
+				light.layers.enable( 0 );
+				light.layers.enable( 1 );
+				light.layers.enable( 2 );
+
+				scene.add( camera );
+				camera.add( light );
+
+                //Color, size, quantitative, position, rotatrion and scale
+				const colors = [ 0xff0000, 0x00ff00, 0xCCff33 ];
+				const geometry = new THREE.BoxGeometry( 5, 5, 5 );
+
+				for ( let i = 0; i < 4000; i ++ ) {
+
+					const layer = ( i % 3 );
+
+					const object = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: colors[ layer ] } ) );
+
+					object.position.x = Math.random() * 800 - 400;
+					object.position.y = Math.random() * 800 - 400;
+					object.position.z = Math.random() * 800 - 400;
+
+					object.rotation.x = Math.random() * 2 * Math.PI;
+					object.rotation.y = Math.random() * 2 * Math.PI;
+					object.rotation.z = Math.random() * 2 * Math.PI;
+
+					object.scale.x = Math.random() + 0.5;
+					object.scale.y = Math.random() + 0.5;
+					object.scale.z = Math.random() + 0.5;
+
+					object.layers.set( layer );
+
+					scene.add( object );
+
+				}
+
+		        renderer = new THREE.WebGLRenderer();
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				container.appendChild( renderer.domElement );
+
+				
+				/* stats = new Stats();  
+				
+				
+				container.appendChild( stats.dom ); */
+
+				
+				
+				/* const layers = {
+
+					'toggle red': function () {
+
+						camera.layers.toggle( 0 );
+
+					},
+
+					'toggle green': function () {
+
+						camera.layers.toggle( 1 );
+
+					},
+
+					'toggle blue': function () {
+
+						camera.layers.toggle( 2 );
+
+					},
+
+					'enable all': function () {
+
+						camera.layers.enableAll();
+
+					},
+
+					'disable all': function () {
+
+						camera.layers.disableAll();
+
+					}
+
+				};
+
+				//
+				// Init gui
+				const gui = new GUI();
+				gui.add( layers, 'toggle red' );
+				gui.add( layers, 'toggle green' );
+				gui.add( layers, 'toggle blue' );
+				gui.add( layers, 'enable all' );
+				gui.add( layers, 'disable all' ); /*
+
+				window.addEventListener( 'resize', onWindowResize ); */
+
+			} 
+
+			function onWindowResize() {
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+			}
+
+			//
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+
+				render();
+				stats.update();
+
+			}
+
+			function render() {
+
+				theta += 0.1;
+
+				camera.position.x = radius * Math.sin( THREE.MathUtils.degToRad( theta ) );
+				camera.position.y = radius * Math.sin( THREE.MathUtils.degToRad( theta ) );
+				camera.position.z = radius * Math.cos( THREE.MathUtils.degToRad( theta ) );
+				camera.lookAt( scene.position );
+
+				renderer.render( scene, camera );
+
+			}
+
+		</script>
+
+	</body>
+</html>

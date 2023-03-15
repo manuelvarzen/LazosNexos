@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="es" class="h-100">
+  
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    <meta name="Content-Type" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+    <meta name="description" content="Aproximación, exploración e indagación" />
+    <meta name="author" content="ManuelVarZen" />
+    <meta name="generator" content="" />
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@lazosnexos" />
+    <meta name="twitter:creator" content="@ManuelVarZen">
+    <meta name="twitter:title" content="LazosNexos" />
+    <meta name="twitter:description" content="Aproximaciones" />
+    <meta name="twitter:image" content="https://lazosnexos.com/img/image026.jpg"/>
+    
+    <!-- Open Graph -->
+    <meta property="og:url" content="https://laxosnexos.com" />
+    <meta property="og:type" content="page" />
+    <meta property="og:title" content="LazosNexos" />
+    <meta property="og:description" content="Aproximaciones" />
+    <meta property="og:image" content="https://lazosnexos.com/img/image026.jpg" />
+    <meta property="og:image:secure_url" content="https://lazosnexos.com/img/image026.jpg" />
+    <meta property="og:image:alt" content="filosofía" />
+    
+    <title>LazosNexos</title>
+
+    <link rel="canonical" href="https://lazosnexos.com">
+    <link type="text/css" rel="stylesheet" href="/examples/main.css">
+
+	<!--<script src="/src/graph/3d-force-graph.js"></script>
+	<script src="/src/graph/index.js"></script> -->
+    
+    <!-- style title -->
+    <style>
+      #info {
+			background-color: rgba(0, 0, 0, 0.8);
+			font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+	        font-size: 22px;
+		}
+
+        .lil-gui .gui-stats {
+			line-height: var(--widget-height);
+			padding: var(--padding);
+		} 
+
+	</style>
+
+  <script src="https://unpkg.com/three"></script>
+  <script src="https://unpkg.com/3d-force-graph"></script>
+  
+  </head>
+  
+  
+<!-- Start Body -->
+<body>
+	<div id="info">
+		<a href="/index.html" target="_self" rel="noopener">Lazos Nexos</a> 
+		<a href="/datavismex1.html" target="_self" rel="noopener">|Escuela|</a>
+		<a href="/escolar.html" target="_self" rel="noopener">|Escolarización|</a>
+		<a href="/capacitacion.html" target="_self" rel="noopener">|Capacitación|</a>
+		<a href="/debate.html" target="_self" rel="noopener">|Debate|</a>
+		<a href="/ense.html" target="_self" rel="noopener">|Enseñanza|</a>
+		<a href="/aprend.html" target="_self" rel="noopener">|Aprendizaje|</a>
+	</div>
+
+	<div id="container"></div>
+
+  <script>
+    // Random tree
+    const NODES = 3000;
+    const GROUPS = 12;
+    const gData = {
+      nodes: [...Array(NODES).keys()].map(i => ({
+        id: i,
+        group: Math.ceil(Math.random() * GROUPS)
+      })),
+      links: [...Array(NODES).keys()]
+        .filter(id => id)
+        .map(id => ({
+          source: id,
+          target: Math.round(Math.random() * (id-1))
+        }))
+    };
+
+    const Graph = ForceGraph3D()
+      (document.getElementById('container'))
+        .nodeAutoColorBy('group')
+        .linkAutoColorBy(d => gData.nodes[d.source].group)
+        .linkOpacity(0.5)
+        .graphData(gData);
+
+//Background image for scene
+      const loader1 = new THREE.TextureLoader();
+			const bgTexture = loader1.load('/img/image_5-1920x1080.png');
+			scene.background = bgTexture;
+//Geometry background scene
+    //const planeGeometry = new THREE.PlaneGeometry(1000, 1000, 1, 1);
+    //const planeMaterial = new THREE.MeshLambertMaterial({color: 0xFF0000, side: THREE.DoubleSide});
+    //const mesh = new THREE.Mesh(planeGeometry, planeMaterial);
+    //mesh.position.set(-100, -200, -100);
+    //mesh.rotation.set(0.5 * Math.PI, 0, 0);
+    graph.scene().add(mesh);
+  </script>
+
+</body>
+</html>
