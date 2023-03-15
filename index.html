@@ -28,57 +28,57 @@
     
     <title>LazosNexos</title>
     <link rel="canonical" href="https://lazosnexos.com">
-    <link type="text/css" rel="stylesheet" href="/examples/main.css">
-    
+    <link type="text/css" rel="stylesheet" href="/css/main.css">
 
- <style>
+<style>
 	#barmenu {
 		background-color: rgba(0, 0, 0, 0.8);
-		font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+		font-family: system-ui, -apple-system, 
+		BlinkMacSystemFont, 
+		'Segoe UI', 
+		Roboto, 
+		Oxygen, 
+		Ubuntu, 
+		Cantarell, 
+		'Open Sans', 
+		'Helvetica Neue', 
+		sans-serif;
 		font-size: 22px;
-	}
-
-	.lil-gui .gui-stats {
-		line-height: var(--widget-height);
-		padding: var(--padding);
-	} 
+		}
 </style>
 
 <style>
 	#info {
 		background-color: rgba(0, 0, 0, 0.8);
 		font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-		font-size: 22px;
+		font-size: 18px;
 		color: #fff;
 		position: absolute;
 		top: 0;
-		left: 0;
+		left: 300;
 		bottom: 0;
 		width: 300px; /* Adjust as needed */
-		display: flex;
+		display: flex;															
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
+		text-align: center;
 	}
 
 	#info a {
 		color: #fff;
 		text-decoration: none;
+		text-align: justify-all;					
 		margin: 5px 0;
 	}
-
-	#container {
+	
+	#container > div {
 		position: absolute;
-		top: 0;
-		left: 300px; /* Adjust as needed */
-		bottom: 0;
-		right: 0;
+		top: 0px;
+		left: 0px;
+		bottom: 0px;
+		right: 0px;
 	}
-
-	.lil-gui .gui-stats {
-		line-height: var(--widget-height);
-		padding: var(--padding);
-	} 
 </style>
 
 </head>
@@ -86,7 +86,7 @@
 <!-- Start Body -->
 <body>
 	<div id="barmenu">
-		<a href="/index.html" target="_self" rel="noopener">LazosNexos</a>
+		<a href="/index.html" target="_self" rel="noopener">LazosNexos -></a>
 		<a href="/datavismex1.html" target="_self" rel="noopener">|Escuela|</a>
 		<a href="/escolar.html" target="_self" rel="noopener">|Escolarización|</a>
 		<a href="/capacitacion.html" target="_self" rel="noopener">|Capacitación|</a>
@@ -96,16 +96,27 @@
 	</div>
 
 	<div id="info">
-		<p>LazosNexos es un proyecto personal que explora y se aproxima a las diferentes percepciones de los docentes en servicio con respecto 
-			al impacto, efecto, uso y significado de las 
-			tecnologías digitales en sus espacios de aprendizaje y enseñanza. 
-			Para realizar este ensayo interdisciplinario recurrimos a la producción 
-			y re/mezcla de distintos medios y formatos a los cuales le agregamos 
-			interactividad. 
-			<p>
-				<a href="https://twitter.com/intent/tweet?screen_name=ManuelVarZen&ref_src=twsrc%5Etfw" class="twitter-mention-button" data-show-count="false">Tweet to @TwitterDev</a>
-				<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-			</p>
+		<p>LazosNexos explora las diferentes percepciones de los docentes en servicio y en formación inicial con respecto 
+			al impacto, efecto, uso y significado de las tecnologías digitales en sus espacios de aprendizaje y enseñanza a través de la producción y re-mezcla 
+			de medios y formatos [no]interactivos.</p>
+
+			<p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/">
+				<a property="dct:title" rel="cc:attributionURL" href="https://lazosnexos.com">LazosNexos</a> 
+				by <a rel="cc:attributionURL dct:creator" property="cc:attributionName" href="https://www.twitter.com/manuelvarzen">Manuel Vargas Alegría</a> 
+				is licensed under <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" 
+				style="display:inline-block;">Attribution-NonCommercial-ShareAlike 4.0 International.</a>
+				<p><img style="height:22px!important;margin-left:3px;vertical-align:text-top;" 
+				src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1">
+				<img style="height:22px!important;margin-left:3px;vertical-align:text-top;" 
+				src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1">
+				<img style="height:22px!important;margin-left:3px;vertical-align:text-top;" 
+				src="https://mirrors.creativecommons.org/presskit/icons/nc.svg?ref=chooser-v1">
+				<img style="height:22px!important;margin-left:3px;vertical-align:text-top;" 
+				src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1"></p></a></p> 
+				
+			<a href="https://twitter.com/intent/tweet?screen_name=ManuelVarZen&ref_src=twsrc%5Etfw" 
+			class="twitter-mention-button" data-show-count="false">Tweet to @TwitterDev</a>
+			<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>			
 		</div>
 
 	<div id="container"></div>
